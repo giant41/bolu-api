@@ -21,4 +21,14 @@ class OrderBahanBakuDetail extends Model
             ->get();
         return $count_data;                
     }
+
+    public function getOrderItemListByNomorOrder($nomor_order) {
+        $list_items = DB::table('order_bahan_baku_details')
+            ->select('order_bahan_baku_details.*', 'bahan_bakus.nama_bahan_baku', 'satuans.simbol_satuan')
+            ->where('order_bahan_baku_details.id_order_bahan_baku', '=', $nomor_order)
+            ->leftJoin('bahan_bakus', 'order_bahan_baku_details.id_bahan_baku', '=', 'bahan_bakus.id')
+            ->leftJoin('satuans', 'bahan_bakus.id_satuan', '=', 'satuans.id')
+            ->get();
+        return $list_items;
+    }
 }

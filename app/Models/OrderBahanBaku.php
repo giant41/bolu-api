@@ -69,4 +69,15 @@ class OrderBahanBaku extends Model
 
         return $data;
     }
+
+    public function orderBahanBakuDetail($id) {
+        $order_detail = DB::table('order_bahan_bakus')
+            ->select('order_bahan_bakus.*', 'suplayers.nama_suplayer', 'users.name')
+            ->where('order_bahan_bakus.id', '=', $id)
+            ->leftJoin('suplayers', 'order_bahan_bakus.id_suplayer', '=', 'suplayers.id')
+            ->leftJoin('users', 'order_bahan_bakus.created_by', '=', 'users.id')
+            ->get();
+
+        return $order_detail;
+    }
 }

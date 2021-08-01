@@ -160,7 +160,31 @@ class OrderBahanBakuController extends Controller
      */
     public function show($id)
     {
-        //
+        $bahan_baku_by_id = $this->orderBahanBakuTable->orderBahanBakuDetail($id);
+
+        $bahan_baku = array();
+        foreach ($bahan_baku_by_id as $bahan) {
+            $bahan_baku['nomor_order'] =  $bahan->nomor_order;
+            $bahan_baku['tanggal_order'] =  $bahan->tanggal_order;
+            $bahan_baku['nama_suplayer'] =  $bahan->nama_suplayer;
+            $bahan_baku['status'] =  $bahan->status;
+            $bahan_baku['created_at'] = $bahan->created_at;
+            $bahan_baku['created_by'] = $bahan->name;
+
+            $count_order_detail = $this->orderBahanBakuDetailTable->getCountOrderByNomorOrder($bahan->nomor_order);
+            $bahan_baku['total_item'] =  $count_order_detail[0]->total_item;
+            $bahan_baku['jumlah_total'] =  $count_order_detail[0]->jumlah_total;
+        }
+
+        $list_items = $this->orderBahanBakuDetailTable->getOrderItemListByNomorOrder($bahan->nomor_order);
+
+        $response = [
+            'message' => 'data order bahan baku',
+            'data' => $bahan_baku,
+            'list_items' => $list_items
+        ];
+
+        return response()->json($response, Response::HTTP_OK);
     }
 
     /**

@@ -17,6 +17,8 @@ class CreateResepsTable extends Migration
             $table->id();
             $table->string('nama_resep');
             $table->text('keterangan')->nullable();
+            $table->foreignId('created_by');
+            $table->foreignId('updated_by');
             $table->timestamps();
         });
     }

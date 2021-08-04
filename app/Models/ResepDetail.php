@@ -49,8 +49,9 @@ class ResepDetail extends Model
                 ->leftJoin('users as u1', 'resep_details.created_by', '=', 'u1.id')
                 ->leftJoin('users as u2', 'resep_details.updated_by', '=', 'u2.id')
                 ->where('resep_details.id_resep', '=', $id_resep)
-                ->where('bahan_bakus.nama_resep', 'like', '%' . $search_word . '%')
-                ->orwhere('users.name', 'LIKE', '%'.$search_word.'%')
+                ->where('bahan_bakus.nama_bahan_baku', 'like', '%' . $search_word . '%')
+                ->orwhere('u1.name', 'LIKE', '%'.$search_word.'%')
+                ->orwhere('u2.name', 'LIKE', '%'.$search_word.'%')
                 ->get();
             $resep = DB::table('resep_details')
                 ->select('resep_details.*', 
@@ -64,8 +65,9 @@ class ResepDetail extends Model
                 ->leftJoin('users as u1', 'resep_details.created_by', '=', 'u1.id')
                 ->leftJoin('users as u2', 'resep_details.updated_by', '=', 'u2.id')
                 ->where('resep_details.id_resep', '=', $id_resep)
-                ->where('bahan_bakus.nama_resep', 'like', '%' . $search_word . '%')
-                ->orwhere('users.name', 'LIKE', '%'.$search_word.'%')
+                ->where('bahan_bakus.nama_bahan_baku', 'like', '%' . $search_word . '%')
+                ->orwhere('u1.name', 'LIKE', '%'.$search_word.'%')
+                ->orwhere('u2.name', 'LIKE', '%'.$search_word.'%')
                 ->limit($limit)
                 ->offset($offset)
                 ->orderBy('resep_details.id', 'DESC')

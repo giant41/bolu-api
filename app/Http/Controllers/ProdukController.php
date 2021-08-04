@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Produk;
+use App\Models\HargaProduk;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
@@ -10,34 +11,52 @@ use Illuminate\Support\Facades\DB;
 
 class ProdukController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->produkTable = new Produk;
+        $this->hargaProdukTable = new HargaProduk;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $produks = DB::table('produks')
-            ->select('produks.*', 'reseps.nama_resep')
-            ->orderBy('produks.id', 'DESC')
-            ->leftJoin('reseps', 'produks.id_resep', '=', 'reseps.id')
-            ->get();
+        $page = $request['page'];
+        $limit = $request['per_page'];
+        $offset = ($page - 1) * $limit;
+        $search_word = $request['keyword'];
 
-        $produk = array();
+        $produks = $this->produkTable->getAllProduk($search_word, $offset, $limit);
+        $data_produk = array();
         $i = 0;
-        foreach ($produks as $prod) {
-            $produk[$i]['id'] =  $prod->id;
-            $produk[$i]['id_resep'] =  $prod->id_resep;
-            $produk[$i]['nama_produk'] =  $prod->nama_resep;
-            $produk[$i]['keterangan'] =  $prod->keterangan;
-            $produk[$i]['created_at'] =  $prod->created_at;
-            $produk[$i]['updated_at'] =  $prod->updated_at;
+        foreach ($produks['produk'] as $produk) {
+
+            $harga = $this->hargaProdukTable->getHargaTerakhir($produk->id);
+            $data_produk[$i]['id'] =  $produk->id;
+            $data_produk[$i]['id_resep'] =  $produk->id_resep;
+            $data_produk[$i]['nama_produk'] =  $produk->nama_resep;
+            if(isset($harga[0])) {
+                $data_produk[$i]['harga']['harga_dasar'] =  $harga[0]->harga_dasar;
+                $data_produk[$i]['harga']['harga_jual'] =  $harga[0]->harga_jual;
+                $data_produk[$i]['harga']['created_at'] =  date_format($harga[0]->created_at, "Y-m-d h:i:s");
+            } else {
+                $data_produk[$i]['harga']['harga_dasar'] =  "";
+                $data_produk[$i]['harga']['harga_jual'] =  "";
+                $data_produk[$i]['harga']['created_at'] =  "";
+            }
+            $data_produk[$i]['created_at'] =  $produk->created_at;
+            $data_produk[$i]['updated_at'] =  $produk->updated_at;
             $i++;
         }
 
         $response = [
             'message' => 'list data produk',
-            'data' => $produk
+            'data' => $data_produk,
+            'total' => $produks['total']
         ];
 
         return response()->json($response, Response::HTTP_OK);
@@ -100,7 +119,6 @@ class ProdukController extends Controller
             $produk['id'] =  $prod->id;
             $produk['id_resep'] =  $prod->id_resep;
             $produk['nama_produk'] =  $prod->nama_resep;
-            $produk['keterangan'] =  $prod->keterangan;
             $produk['created_at'] =  $prod->created_at;
             $produk['updated_at'] =  $prod->updated_at;
         }

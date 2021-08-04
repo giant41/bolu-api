@@ -17,7 +17,7 @@ class CreateResepDetailsTable extends Migration
             $table->id();
             $table->foreignId('id_resep');
             $table->foreignId('id_bahan_baku');
-            $table->integer('jumlah_bahan_baku');
+            $table->double('jumlah_bahan_baku', 8, 2);
             $table->text('keterangan')->nullable();
             $table->foreignId('created_by');
             $table->foreignId('updated_by');

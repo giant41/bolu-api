@@ -19,7 +19,7 @@ class CreateProduksiDetailsTable extends Migration
             $table->foreignId('id_resep');
             $table->foreignId('id_resep_detail');
             $table->foreignId('id_bahan_baku');
-            $table->integer('jumlah_bahan_baku');
+            $table->double('jumlah_bahan_baku', 8, 2);
             $table->timestamps();
         });
     }

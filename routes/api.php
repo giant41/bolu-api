@@ -68,11 +68,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/bahan-baku/list', [BahanBakuController::class, 'index']);
     Route::resource('/bahan-baku', BahanBakuController::class)->except(['create', 'edit', 'index', 'allBahanBaku']);
 
-    
     // route data detail
     Route::resource('/bahan-baku-detail', BahanBakuDetailController::class)->except(['create', 'edit', 'index']);
     Route::post('/bahan-baku-detail/list', [BahanBakuDetailController::class, 'index']);
-
 
     // route temporary order
     Route::get('/temp-order/by-bahan-baku/{id}', [OrderTempBahanBakuController::class, 'showByBahanBakuId']);
@@ -89,12 +87,20 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/resep/list', [ResepController::class, 'index']);
     Route::resource('/resep', ResepController::class)->except(['create', 'edit', 'index', 'getDetail']);
 
+    // / route data resep detal
     Route::resource('/resep-detail', ResepDetailController::class)->except(['create', 'edit', 'getAllDataByResepId', 'getDetailByResepAndBahan']);
     Route::post('/resep-detail/list', [ResepDetailController::class, 'getAllDataByResepId']);
     Route::post('/resep-detail/resep-by-id', [ResepDetailController::class, 'getDetailByResepAndBahan']);
 
-    Route::resource('/produk', ProdukController::class)->except(['create', 'edit']);
-    Route::resource('/harga-produk', HargaProdukController::class)->except(['create', 'edit']);
+    // route data produk
+    Route::post('/produk/list', [ProdukController::class, 'index']);
+    Route::resource('/produk', ProdukController::class)->except(['create', 'edit', 'index']);
+
+    // route ata harga produk
+    Route::post('/harga-produk', [HargaProdukController::class, 'index']);
+    Route::post('/harga-produk/list', [HargaProdukController::class, 'getAllDataByProdukId']);
+    Route::resource('/harga-produk', HargaProdukController::class)->except(['create', 'edit', 'index', 'getAllDataByProdukId']);
+
     Route::resource('/produksi', ProduksiController::class)->except(['create', 'edit', 'update', 'destroy']);
 
     Route::resource('/pemesan', PemesanController::class)->except(['create', 'edit']);

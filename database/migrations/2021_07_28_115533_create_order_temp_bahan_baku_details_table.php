@@ -16,7 +16,7 @@ class CreateOrderTempBahanBakuDetailsTable extends Migration
         Schema::create('order_temp_bahan_baku_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_bahan_baku');
-            $table->integer('jumlah_pesanan');
+            $table->double('jumlah_pesanan', 8, 2);
             $table->integer('harga_satuan');
             $table->foreignId('created_by');
             $table->timestamps();

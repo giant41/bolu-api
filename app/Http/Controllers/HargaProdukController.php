@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\DB;
 
 class HargaProdukController extends Controller
 {
+
+    public function __construct() {
+        $this->hargaProdukTable = new HargaProduk;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -113,6 +118,42 @@ class HargaProdukController extends Controller
         $response = [
             'message' => 'data harga produk detail',
             'data' => $produk
+        ];
+
+        return response()->json($response, Response::HTTP_OK);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllDataByProdukId(Request $request)
+    {
+        $page = $request['page'];
+        $limit = $request['per_page'];
+        $offset = ($page - 1) * $limit;
+        $search_word = $request['keyword'];
+
+        $data_harga_produk = $this->hargaProdukTable->getAllHargaByProdukId($search_word, $request['id'], $offset, $limit);
+
+        $data_harga = array();
+        $i = 0;
+        foreach ($data_harga_produk['harga'] as $harga) {
+            $data_harga[$i]['id'] =  $harga->id;
+            $data_harga[$i]['id_produk'] =  $harga->id_produk;
+            $data_harga[$i]['harga_dasar'] =  $harga->harga_dasar;
+            $data_harga[$i]['harga_jual'] =  $harga->harga_jual;
+            $data_harga[$i]['created_at'] =  $harga->created_at;
+            $data_harga[$i]['updated_at'] =  $harga->updated_at;
+            $i++;
+        }
+
+        $response = [
+            'message' => 'data harga produk',
+            'data' => $data_harga,
+            'total' => $data_harga_produk['total']
         ];
 
         return response()->json($response, Response::HTTP_OK);

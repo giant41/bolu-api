@@ -18,6 +18,7 @@ class CreateProduksisTable extends Migration
             $table->foreignId('id_produk');
             $table->integer('jumlah_produksi');
             $table->text('keterangan')->nullable();
+            $table->foreignId('created_by');
             $table->timestamps();
         });
     }

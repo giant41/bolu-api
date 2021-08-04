@@ -19,7 +19,7 @@ class CreateBahanBakuDetailsTable extends Migration
             $table->foreignId('id_suplayer');
             $table->integer('nomor_order');
             $table->double('harga_satuan', 8, 2);
-            $table->integer('jumlah_order');
+            $table->double('jumlah_order', 8, 2);
             $table->date('tanggal_order');
             $table->timestamps();
             $table->index('id_bahan_baku');

@@ -16,7 +16,6 @@ class CreateProduksTable extends Migration
         Schema::create('produks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_resep');
-            $table->text('keterangan')->nullable();
             $table->timestamps();
             $table->index('id_resep');
         });

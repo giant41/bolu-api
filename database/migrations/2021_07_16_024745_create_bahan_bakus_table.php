@@ -17,7 +17,7 @@ class CreateBahanBakusTable extends Migration
             $table->id();
             $table->foreignId('id_satuan');
             $table->string('nama_bahan_baku');
-            $table->integer('stok');
+            $table->double('stok', 8, 2);
             $table->foreignId('created_by');
             $table->foreignId('updated_by');
             $table->timestamps();

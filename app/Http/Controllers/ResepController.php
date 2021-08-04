@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Resep;
+use App\Models\Produk;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
@@ -13,6 +14,7 @@ class ResepController extends Controller
     public function __construct()
     {
         $this->resepTable = new Resep;
+        $this->produkTable = new Produk;
     }
 
     /**
@@ -70,6 +72,7 @@ class ResepController extends Controller
 
         try{
             $resep = Resep::create($request->all());
+            $produk = $this->produkTable->addProduk($resep->id);
             $response = [
                 'message' => 'data resep berhasil dibuat',
                 'data' => $resep
